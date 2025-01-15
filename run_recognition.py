@@ -1,5 +1,3 @@
-import cv2
-import cvlib as cv
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
@@ -13,8 +11,10 @@ from PIL import Image
 #dictionary holding both, then to a pandas dataframe which can then be used to train the model
 def generate_data(num_samples = 1000):
     data = {'image':[], 'label':[]}
-    for image_file in os.listdir("Facial Recog Python/dataset/train/angry"):
-        path = os.path.join("Facial Recog Python/dataset/train/angry", image_file)
+    current = os.path.dirname(os.path.abspath("Facial Recog Python"))
+    relative_training_path = os.path.join(current, "dataset/train")
+    for image_file in os.path.join(relative_training_path, "angry"):
+        path = os.path.join(relative_training_path, "angry", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
@@ -96,39 +96,7 @@ def create_model():
     print("Trained model saved to " + model_filename)
 
     #load model from file
-    done_model = joblib.load(model_filename)
-
-#this function uses openCV to capture default camera, and then estimates emotion using the model
-def estimate_emotion(loaded_model):
-    cap = cv2.VideoCapture(0)
-
-    while True:
-        ret, frame = cap.read()
-
-        faces, confidences = cv.detect_face(frame)
-
-        for face, confidences in zip(faces, confidences):
-            (start_x, start_y, end_x, end_y) = face
-
-            cropped_face = frame[start_y:end_y, start_x:end_x]
-
-            face_resize = cv2.resize(cropped_face, (40, 40))
-
-            flat_face = face_resize.flatten()
-
-            emotion = loaded_model.predict([flat_face])[0]
-
-            label  = f'Emotion: {emotion}'
-            cv2.rectangle(frame, (start_x, start_y), (end_x, end_y), (0, 255, 0), 2)
-            cv2.putText(frame, label, (start_x, start_y - 10), cv2.FONT_HERSHEY_PLAIN, 0.8, (0, 255, 0), 2)
-
-        cv2.imshow('Emotion Detection', frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
+    
 
 if __name__ == "__main__":
     create_model()
