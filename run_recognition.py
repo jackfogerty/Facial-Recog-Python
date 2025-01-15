@@ -11,9 +11,9 @@ from PIL import Image
 #dictionary holding both, then to a pandas dataframe which can then be used to train the model
 def generate_data(num_samples = 1000):
     data = {'image':[], 'label':[]}
-    current = os.path.dirname(os.path.abspath("Facial Recog Python"))
-    relative_training_path = os.path.join(current, "dataset/train")
-    for image_file in os.path.join(relative_training_path, "angry"):
+    current = os.path.dirname(os.path.abspath(__file__))
+    relative_training_path = os.path.join(current, "dataset", "train")
+    for image_file in os.listdir(os.path.join(relative_training_path, "angry")):
         path = os.path.join(relative_training_path, "angry", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
@@ -21,48 +21,48 @@ def generate_data(num_samples = 1000):
             data['image'].append(flat_image)
             data['label'].append('angry')
     
-    for image_file in os.listdir("Facial Recog Python/dataset/train/disgusted"):
-        path = os.path.join("Facial Recog Python/dataset/train/disgusted", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "disgusted")):
+        path = os.path.join(relative_training_path, "disgusted", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
             data['image'].append(flat_image)
             data['label'].append('disgusted')
 
-    for image_file in os.listdir("Facial Recog Python/dataset/train/fearful"):
-        path = os.path.join("Facial Recog Python/dataset/train/fearful", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "fearful")):
+        path = os.path.join(relative_training_path, "fearful", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
             data['image'].append(flat_image)
             data['label'].append('fearful')
 
-    for image_file in os.listdir("Facial Recog Python/dataset/train/happy"):
-        path = os.path.join("Facial Recog Python/dataset/train/happy", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "happy")):
+        path = os.path.join(relative_training_path, "happy", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
             data['image'].append(flat_image)
             data['label'].append('happy')
 
-    for image_file in os.listdir("Facial Recog Python/dataset/train/neutral"):
-        path = os.path.join("Facial Recog Python/dataset/train/neutral", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "neutral")):
+        path = os.path.join(relative_training_path, "neutral", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
             data['image'].append(flat_image)
             data['label'].append('neutral')
 
-    for image_file in os.listdir("Facial Recog Python/dataset/train/sad"):
-        path = os.path.join("Facial Recog Python/dataset/train/sad", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "sad")):
+        path = os.path.join(relative_training_path, "sad", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
             data['image'].append(flat_image)
             data['label'].append('sad')
 
-    for image_file in os.listdir("Facial Recog Python/dataset/train/surprised"):
-        path = os.path.join("Facial Recog Python/dataset/train/surprised", image_file)
+    for image_file in os.listdir(os.path.join(relative_training_path, "surprised")):
+        path = os.path.join(relative_training_path, "surprised", image_file)
         with Image.open(path) as image:
             resized_image = image.resize((48, 48)).convert('L')
             flat_image = np.array(resized_image).flatten()
