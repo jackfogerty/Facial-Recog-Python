@@ -1,6 +1,7 @@
 import cv2
 import cvlib as cv
 import joblib
+from PIL import Image
 
 #this function uses openCV to capture default camera, and then estimates emotion using the model
 def estimate_emotion(path):
@@ -20,7 +21,7 @@ def estimate_emotion(path):
 
             cropped_face = frame[start_y:end_y, start_x:end_x]
 
-            face_resize = cv2.resize(cropped_face, (40, 40))
+            face_resize = cv2.resize(cropped_face, (48, 48)).convert('L')
 
             flat_face = face_resize.flatten()
 

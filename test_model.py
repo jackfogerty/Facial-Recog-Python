@@ -10,6 +10,7 @@ def test_dictionary():
 
     current = os.path.dirname(os.path.abspath(__file__))
     relative_training_path = os.path.join(current, "dataset", "test")
+    print("Creating dataframe...")
     for image_file in os.listdir(os.path.join(relative_training_path, "angry")):
         path = os.path.join(relative_training_path, "angry", image_file)
         with Image.open(path) as image:
@@ -65,10 +66,19 @@ def test_dictionary():
             data['image'].append(flat_image)
             data['label'].append('surprised')
         num_surprised += 1
+    
+    print("dataframe created.")
 
     model = joblib.load("emotion_detector.pkl")
 
+    print("testing model...")
     for i in range(len(data['image'])):
+        if i == len(data['image'])//2:
+            print('50% done testing.')
+        if i == len(data['image'])//4:
+            print('25% done testing.')
+        if i == 3 * len(data['image'])//4:
+            print('75% done testing.')
         img = data['image'][i]
         reshaped_img = np.array(img.reshape(1, -1))
         prediction = model.predict(reshaped_img)

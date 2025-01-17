@@ -1,6 +1,8 @@
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
 from sklearn.pipeline import Pipeline
+from sklearn.neural_network import MLPClassifier
 import joblib
 import pandas as pd
 import numpy as np
@@ -75,17 +77,18 @@ def generate_data(num_samples = 1000):
 
 def create_model():
     #splits the data into 4 parts; a set containing training images, a set containing training corresponding labels
-    #and a set containing the above for testing. The testing set is 20% of the total data set.
+    #and a set containing the above for testing.
     training_data = generate_data()
     img_train, img_test, label_train, label_test = train_test_split(training_data['image'],
                                                                     training_data['label'], 
-                                                                    test_size = 0.00000001, 
+                                                                    test_size = 0.15, 
                                                                     random_state = 4)
     
     #creates the RandomForest algorithm object
-    model = Pipeline([('classifier', RandomForestClassifier(n_estimators=100))])
-
+    #model = Pipeline([('classifier, RandomForestObject(n_estimators=300))])
+    model = Pipeline([('classifier', MLPClassifier(solver= 'adam', hidden_layer_sizes=(512, 256, 128, 64, 32, 16), max_iter=1000, random_state=3))])
     img_train_flat = [np.array(img).ravel() for img in img_train]
+    img_test_flat = [np.array(img).ravel() for img in img_test]
     
     #training the model
     model.fit(img_train_flat, label_train)
@@ -96,6 +99,12 @@ def create_model():
     print("Trained model saved to " + model_filename)
 
     #load model from file
+    model = joblib.load(model_filename)
+
+    #print accuracy of model
+    accuracy = model.score(img_test_flat, label_test)
+    print(f'{accuracy} % accurate')
+
     
 
 if __name__ == "__main__":
