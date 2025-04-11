@@ -1,2 +1,3 @@
 emotion_detector.pkl
 emotion_detector_Random_forest.pkl
+.venv/
